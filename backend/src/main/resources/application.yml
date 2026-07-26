@@ -12,7 +12,10 @@ spring:
     host: ${REDIS_HOST:localhost}
     port: ${REDIS_PORT:6379}
   cache.type: redis
-server.servlet.context-path: /api
+server:
+  port: 8084
+  servlet:
+    context-path: /api
 app.jwt.secret: ${JWT_SECRET:replace-this-development-secret-with-at-least-32-characters}
 app.jwt.access-minutes: 30
 app.jwt.refresh-days: 14

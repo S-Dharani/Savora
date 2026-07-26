@@ -1,0 +1,45 @@
+pipeline {
+  agent any
+
+  environment {
+    BACKEND_IMAGE = 'dharani1001/savora-backend'
+    FRONTEND_IMAGE = 'dharani1001/savora-frontend'
+  }
+
+  stages {
+    stage('Build and test backend') {
+      steps {
+        dir('backend') { sh 'mvn clean verify' }
+      }
+    }
+
+    stage('Build frontend') {
+      steps {
+        dir('frontend') { sh 'npm ci && npm run build' }
+      }
+    }
+
+    stage('Build and push Docker images') {
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_TOKEN')]) {
+          sh '''
+            echo "$DOCKERHUB_TOKEN" | docker login --username "$DOCKERHUB_USERNAME" --password-stdin
+            docker build -t "$DOCKERHUB_USERNAME/$BACKEND_IMAGE:$BUILD_NUMBER" -t "$DOCKERHUB_USERNAME/$BACKEND_IMAGE:latest" backend
+            docker build -t "$DOCKERHUB_USERNAME/$FRONTEND_IMAGE:$BUILD_NUMBER" -t "$DOCKERHUB_USERNAME/$FRONTEND_IMAGE:latest" frontend
+            docker push "$DOCKERHUB_USERNAME/$BACKEND_IMAGE:$BUILD_NUMBER"
+            docker push "$DOCKERHUB_USERNAME/$BACKEND_IMAGE:latest"
+            docker push "$DOCKERHUB_USERNAME/$FRONTEND_IMAGE:$BUILD_NUMBER"
+            docker push "$DOCKERHUB_USERNAME/$FRONTEND_IMAGE:latest"
+          '''
+        }
+      }
+    }
+  }
+
+  post {
+    always {
+      archiveArtifacts artifacts: 'backend/target/*.jar,frontend/dist/**', fingerprint: true, allowEmptyArchive: false
+      cleanWs()
+    }
+  }
+}

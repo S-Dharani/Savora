@@ -13,6 +13,6 @@ Java 17, Maven 3.9+, Node 20+, MySQL 8, and Redis 7 must be running locally.
 3. Run the API: `cd backend && mvn spring-boot:run`.
 4. Run the client: `cd frontend && npm install && npm run dev`.
 
-The API is served at `http://localhost:8080/api`, Swagger UI at `/swagger-ui/index.html`, and the client at `http://localhost:5173`.
+The API is served at `http://localhost:8084/api`, Swagger UI at `/swagger-ui/index.html`, and the client at `http://localhost:5173`.
 
 Default seeded admin: `admin@savora.local` / `Admin@123`.

@@ -1,0 +1,29 @@
+pipeline {
+  agent any
+
+  parameters {
+    string(name: 'DOCKERHUB_NAMESPACE', defaultValue: 'dharani1001', description: 'Docker Hub namespace')
+    string(name: 'IMAGE_TAG', defaultValue: 'latest', description: 'Image tag produced by CI')
+  }
+
+  stages {
+    stage('Deploy to production Kubernetes') {
+      steps {
+        withCredentials([file(credentialsId: 'prod-kubeconfig', variable: 'KUBECONFIG_FILE')]) {
+          sh '''
+            export KUBECONFIG="$KUBECONFIG_FILE"
+            kubectl apply -f k8s/00-namespace.yml
+            kubectl -n prod create configmap mysql-init --from-file=database.sql --dry-run=client -o yaml | kubectl apply -f -
+            kubectl apply -f k8s/
+            kubectl -n prod set image deployment/savora-backend backend="$DOCKERHUB_NAMESPACE/savora-backend:$IMAGE_TAG"
+            kubectl -n prod set image deployment/savora-frontend frontend="$DOCKERHUB_NAMESPACE/savora-frontend:$IMAGE_TAG"
+            kubectl -n prod rollout status deployment/savora-backend --timeout=180s
+            kubectl -n prod rollout status deployment/savora-frontend --timeout=180s
+          '''
+        }
+      }
+    }
+  }
+
+  post { always { cleanWs() } }
+}
