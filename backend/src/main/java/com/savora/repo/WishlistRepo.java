@@ -1,0 +1,1 @@
+package com.savora.repo; import com.savora.model.*; import org.springframework.data.jpa.repository.JpaRepository; import java.util.*; public interface WishlistRepo extends JpaRepository<WishlistItem,WishlistKey>{List<WishlistItem> findByUserId(Long id); boolean existsByUserIdAndFoodId(Long u,Long f); void deleteByUserIdAndFoodId(Long u,Long f);}

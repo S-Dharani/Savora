@@ -1,0 +1,2 @@
+package com.savora.model; import jakarta.persistence.*; import java.math.*;
+@Entity @Table(name="restaurants") public class Restaurant { @Id @GeneratedValue(strategy=GenerationType.IDENTITY) public Long id; @Column(nullable=false) public String name; @Column(unique=true) public String slug; @Column(columnDefinition="TEXT") public String description; public String image,banner,cuisine; public BigDecimal rating=BigDecimal.ZERO,deliveryFee=BigDecimal.ZERO,minimumOrder=BigDecimal.ZERO; public Integer reviewCount=0,deliveryMinutes=30; public boolean active=true; }

@@ -1,0 +1,1 @@
+package com.savora.repo; import com.savora.model.*; import org.springframework.data.jpa.repository.JpaRepository; import java.util.*; public interface AddressRepo extends JpaRepository<Address,Long>{List<Address> findByUserId(Long id);}

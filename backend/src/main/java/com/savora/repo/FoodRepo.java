@@ -1,0 +1,1 @@
+package com.savora.repo; import com.savora.model.*; import org.springframework.data.jpa.repository.*; import org.springframework.data.domain.*; import java.util.*; public interface FoodRepo extends JpaRepository<Food,Long>{Page<Food> findByAvailableTrueAndNameContainingIgnoreCase(String q,Pageable p); List<Food> findByRestaurantIdAndAvailableTrue(Long id);}

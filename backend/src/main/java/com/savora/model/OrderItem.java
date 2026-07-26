@@ -1,0 +1,1 @@
+package com.savora.model; import jakarta.persistence.*; import java.math.*; @Entity @Table(name="order_items") public class OrderItem { @Id @GeneratedValue(strategy=GenerationType.IDENTITY) public Long id; @ManyToOne(optional=false) public Order order; @ManyToOne(optional=false) public Food food; public String name; public BigDecimal price; public int quantity; }

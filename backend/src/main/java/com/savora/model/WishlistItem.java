@@ -1,0 +1,1 @@
+package com.savora.model; import jakarta.persistence.*; @Entity @Table(name="wishlist_items") @IdClass(WishlistKey.class) public class WishlistItem { @Id @ManyToOne public User user; @Id @ManyToOne public Food food; }

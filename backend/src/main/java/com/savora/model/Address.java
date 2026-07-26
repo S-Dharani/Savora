@@ -1,0 +1,1 @@
+package com.savora.model; import jakarta.persistence.*; @Entity @Table(name="addresses") public class Address { @Id @GeneratedValue(strategy=GenerationType.IDENTITY) public Long id; @ManyToOne(optional=false) public User user; public String label,line1,line2,city,state,postalCode; public boolean isDefault; }

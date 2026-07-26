@@ -1,0 +1,1 @@
+package com.savora.repo; import com.savora.model.*; import org.springframework.data.jpa.repository.*; import org.springframework.data.domain.*; public interface OrderRepo extends JpaRepository<Order,Long>{Page<Order> findByUserIdOrderByCreatedAtDesc(Long id,Pageable p);}
