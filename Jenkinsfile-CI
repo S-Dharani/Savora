@@ -4,8 +4,8 @@ pipeline {
         maven 'maven'
     }
     environment {
-            DOCKER_FRONT_IMG: 'dharani1001/savorafrontend'
-            DOCKER_BACK_IMG: 'dharani1001/savorabackend'
+            DOCKER_FRONT_IMG= 'dharani1001/savorafrontend'
+            DOCKER_BACK_IMG= 'dharani1001/savorabackend'
     }
     stages {
         stage("Build Backend") {
