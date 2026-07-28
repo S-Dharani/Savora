@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: prod
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: fronend
+    spec:
+      containers:
+        - name: frontendsavora
+          image: dharani1001/savorafrontend
+          ports:
+            - containerPort: 5173

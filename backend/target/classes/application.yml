@@ -1,7 +1,7 @@
 spring:
   application.name: savora-api
   datasource:
-    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/${MYSQL_DATABASE:savora}?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+    url: ${SPRING_URL}
     username: ${MYSQL_USER:root}
     password: ${MYSQL_PASSWORD:root}
   jpa:
