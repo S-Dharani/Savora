@@ -11,12 +11,7 @@ pipeline {
         stage("Build Backend") {
             steps { 
                 sh '''
-                cd backend
-                pwd
-                ls -la
-                java -version
-                mvn -version
-                mvn clean package -DskipTests
+                mvn -f backend/pom.xml clean package -DskipTests
                 '''
                 }
         }
