@@ -12,6 +12,10 @@ pipeline {
             steps { 
                 sh '''
                 cd backend
+                pwd
+                ls -la
+                java -version
+                mvn -version
                 mvn clean package -DskipTests
                 '''
                 }
