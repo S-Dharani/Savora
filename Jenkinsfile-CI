@@ -11,26 +11,7 @@ pipeline {
         stage("Build Backend") {
             steps { 
                 sh '''
-                            echo "Current directory:"
-            pwd
-
-            echo "Listing files:"
-            ls -la
-
-            cd backend
-
-            echo "Inside backend:"
-            pwd
-            ls -la
-
-            echo "Java:"
-            java -version
-
-            echo "Maven:"
-            mvn -version
-
             mvn clean package -DskipTests
-
                 '''
                 }
         }
