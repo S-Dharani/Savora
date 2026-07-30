@@ -1,67 +1,82 @@
 pipeline {
     agent any
-    parameter {
+
+    parameters {
         choice(
-            name: 'ACTION'
-            choices: [
-                'DEPLOY_APP','DEPLOY_DB','REMOVE_APP','REMOVE_DB'
-            ],description: 'select the option'
+            name: 'ACTION',
+            choices: ['DEPLOY_APP', 'DEPLOY_DB', 'REMOVE_APP', 'REMOVE_DB'],
+            description: 'Select the option'
         )
     }
+
     stages {
+
         stage('Deploy Application') {
             when {
-                expression { params.ACTION == 'DEPLOY_APP'}
+                expression { params.ACTION == 'DEPLOY_APP' }
             }
             steps {
-                sh '''
-                kubectl apply -f kube/names.yaml
-                kubectl apply -f kube/springfile.yaml
-                kubectl apply -f kube/springservice.yaml
-                kubectl apply -f kube/frontendfile.yaml
-                kubectl apply -f kube/frontendservice.yaml
-                '''
+                withCredentials([file(credentialsId: 'kubeconfig-secret', variable: 'KUBECONFIG')]) {
+                    sh '''
+                    export KUBECONFIG=$KUBECONFIG
+
+                    kubectl apply -f kube/names.yaml
+                    kubectl apply -f kube/springfile.yaml
+                    kubectl apply -f kube/springservice.yaml
+                    kubectl apply -f kube/frontendfile.yaml
+                    kubectl apply -f kube/frontendservice.yaml
+                    '''
+                }
             }
         }
+
         stage('Deploy DB') {
             when {
-                expression {
-                    params.ACTION == 'DEPLOY_DB'
-                }
+                expression { params.ACTION == 'DEPLOY_DB' }
             }
             steps {
-                sh '''
-                kubectl apply -f kube/mysqlservice.yaml
-                kubectl apply -f kube/mysqlfile.yaml
-                '''
+                withCredentials([file(credentialsId: 'kubeconfig-secret', variable: 'KUBECONFIG')]) {
+                    sh '''
+                    export KUBECONFIG=$KUBECONFIG
+
+                    kubectl apply -f kube/mysqlservice.yaml
+                    kubectl apply -f kube/mysqlfile.yaml
+                    '''
+                }
             }
         }
+
         stage('Remove Application') {
             when {
-                expression {
-                    params.ACTION == 'REMOVE_APP'
-                }
+                expression { params.ACTION == 'REMOVE_APP' }
             }
             steps {
-                sh '''
-                kubectl delete -f kube/frontendservice.yaml
-                kubectl delete -f kube/frontendfile.yaml
-                kubectl delete -f kube/springservice.yaml
-                kubectl delete -f kube/springfile.yaml
-                '''
+                withCredentials([file(credentialsId: 'kubeconfig-secret', variable: 'KUBECONFIG')]) {
+                    sh '''
+                    export KUBECONFIG=$KUBECONFIG
+
+                    kubectl delete -f kube/frontendservice.yaml
+                    kubectl delete -f kube/frontendfile.yaml
+                    kubectl delete -f kube/springservice.yaml
+                    kubectl delete -f kube/springfile.yaml
+                    '''
+                }
             }
         }
+
         stage('Remove DB') {
             when {
-                expression {
-                    params.ACTION == 'REMOVE_DB'
-                }
+                expression { params.ACTION == 'REMOVE_DB' }
             }
             steps {
-                sh '''
-                kubectl delete -f kube/mysqlservice.yaml
-                kubectl delete -f kube/mysqlfile.yaml
-                '''
+                withCredentials([file(credentialsId: 'kubeconfig-secret', variable: 'KUBECONFIG')]) {
+                    sh '''
+                    export KUBECONFIG=$KUBECONFIG
+
+                    kubectl delete -f kube/mysqlservice.yaml
+                    kubectl delete -f kube/mysqlfile.yaml
+                    '''
+                }
             }
         }
     }
