@@ -11,6 +11,7 @@ pipeline {
         stage("Build Backend") {
             steps { 
                 sh '''
+            cd backend    
             mvn clean package -DskipTests
                 '''
                 }
